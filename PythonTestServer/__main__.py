@@ -13,5 +13,10 @@ def test_post():
 	toReturn = {"success": True, "Hi": lastName}
 	return jsonify(toReturn);
 
+@app.route('/test/delete', methods=['DELETE'])
+def test_delete():
+	print('delete')
+	return jsonify({"deletion": 'successful'})
+
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0')
