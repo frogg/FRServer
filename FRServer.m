@@ -70,5 +70,41 @@
     [FRServer dataFromURL:url HTTPMethod:HTTPMethod attributes:attributes HTTPHeaderFieldDictionary:HTTPHeaderFields andCallbackBlock:finishedDownloading];
 }
 
++(void) stringFromURL:(NSString *)url HTTPMethod:(NSString *)HTTPMethod attributes:(NSDictionary *)attributes HTTPHeaderFieldDictionary:(NSDictionary *)HTTPHeaderFields andCallbackBlock:(void (^)(NSString *))block {
+
+    void (^finishedDownloading)(NSData *data) = ^void(NSData *data) {
+        if(data) {
+            NSString *string = [ [ NSString alloc ] initWithData:data encoding:NSUTF8StringEncoding ];
+            block(string);
+        } else {
+            block(nil);
+        }
+    };
+    
+    
+    [FRServer dataFromURL:url HTTPMethod:HTTPMethod attributes:attributes HTTPHeaderFieldDictionary:HTTPHeaderFields andCallbackBlock:finishedDownloading];
+    
+}
+
+
++(void) dataFromServerRequest:(FRServerRequest *)serverRequest {
+    [FRServer dataFromURL:serverRequest.url HTTPMethod:serverRequest.HTTPMethod attributes:serverRequest.attributes HTTPHeaderFieldDictionary:serverRequest.HTTPHeaderFields andCallbackBlock:serverRequest.block];
+}
+
+
++(void) stringFromServerRequest:(FRServerRequest *)serverRequest {
+    [FRServer stringFromURL:serverRequest.url HTTPMethod:serverRequest.HTTPMethod attributes:serverRequest.attributes HTTPHeaderFieldDictionary:serverRequest.HTTPHeaderFields andCallbackBlock:serverRequest.block];
+}
+
++(void) imageFromServerRequest:(FRServerRequest *)serverRequest {
+    [FRServer imageFromURL:serverRequest.url HTTPMethod:serverRequest.HTTPMethod attributes:serverRequest.attributes HTTPHeaderFieldDictionary:serverRequest.HTTPHeaderFields andCallbackBlock:serverRequest.block];
+}
+
++(void) jsonFromServerRequest:(FRServerRequest *)serverRequest {
+    [FRServer jsonFromURL:serverRequest.url HTTPMethod:serverRequest.HTTPMethod attributes:serverRequest.attributes HTTPHeaderFieldDictionary:serverRequest.HTTPHeaderFields andCallbackBlock:serverRequest.block];
+}
+
+
+
 
 @end

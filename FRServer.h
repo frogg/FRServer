@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FRServerRequest.h"
 @import UIKit;
 @interface FRServer : NSObject
 
@@ -17,6 +18,13 @@
 
 +(void) jsonFromURL:(NSString *) url HTTPMethod:(NSString *) HTTPMethod attributes:(NSDictionary *) attributes HTTPHeaderFieldDictionary:(NSDictionary *) HTTPHeaderFields andCallbackBlock: (void (^) (NSDictionary *JSON)) block;
 
++(void) stringFromURL:(NSString *)url HTTPMethod:(NSString *)HTTPMethod attributes:(NSDictionary *)attributes HTTPHeaderFieldDictionary:(NSDictionary *)HTTPHeaderFields andCallbackBlock:(void (^)(NSString *))block;
+
+
++(void) dataFromServerRequest:(FRServerRequest *) serverRequest;
++(void) imageFromServerRequest:(FRServerRequest *) serverRequest;
++(void) jsonFromServerRequest:(FRServerRequest *) serverRequest;
++(void) stringFromServerRequest:(FRServerRequest *) serverRequest;
 
 
 @end
