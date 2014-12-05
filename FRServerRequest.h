@@ -10,11 +10,11 @@
 
 @interface FRServerRequest : NSObject
 
-@property(readwrite) NSString *url;
-@property(readwrite) NSString *HTTPMethod;
-@property(readwrite) NSDictionary *attributes;
-@property(readwrite) NSDictionary *HTTPHeaderFields;
-@property(readwrite) void (^block) (NSObject *data);
+@property(readwrite,strong) NSString *url;
+@property(readwrite,strong) NSString *HTTPMethod;
+@property(readwrite,strong) NSDictionary *attributes;
+@property(readwrite,strong) NSDictionary *HTTPHeaderFields;
+@property(readwrite,strong) void (^block) (NSObject *data);
 
 
 
