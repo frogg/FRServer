@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 public class test_activity extends ActionBarActivity {
@@ -18,16 +19,23 @@ public class test_activity extends ActionBarActivity {
 
             JSONParser json = new JSONParser() {
             @Override
-            public void onJSONLoaded(JSONArray jArr) {
-            Log.d("LogsLar","JSONLoaded");
-            }
+            public void onJSONLoaded(JSONObject jObj) {
+            Log.d("LogsLar", jObj.toString());
+                try {
+                    //to get the values for keys
+                    Log.d("LogsLar", jObj.getString("get"));
+                    Log.d("LogsLar", jObj.getString("hi"));
+                }catch(Exception e){
 
+                }
+            }
             @Override
             public void JSONNotLoaded() {
             Log.d("LogsLar","JSONNotLoaded");
             }
         };
-        json.execute("put in your url here!");
+        //if you are working with the python test server, run it and put your IP address here
+        json.execute("http://192.168.178.22:5000/test/get");
     }
 
 

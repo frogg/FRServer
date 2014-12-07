@@ -21,7 +21,7 @@ def test_delete():
 @app.route('/test/get', methods=['GET'])
 def test_get():
 	print('get')
-	return jsonify({"get": 'successful'})
+	return jsonify({"get": 'successful', "hi": 'mampf'})
 
 @app.route('/test/put/<string(length=2):code>', methods=['PUT'])
 def test_put(code):

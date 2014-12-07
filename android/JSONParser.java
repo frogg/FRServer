@@ -1,4 +1,4 @@
-package larissa.com.kantine.controller;
+package project.server;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -7,7 +7,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,27 +17,27 @@ import java.io.InputStreamReader;
 /**
  * Created by Larissa Laich on 11.11.14.
  */
-public abstract class JSONParser extends AsyncTask<String, Void, JSONArray> {
+public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
 
     protected void onPreExecute(){
        // Log.d("LogLari","is called before doInBackground");
     }
-    protected void onPostExecute(JSONArray jArr){
+    protected void onPostExecute(JSONObject jObj){
        // Log.d("LogLari","is called after doInBackground");
-        if (jArr == null){
+        if (jObj == null){
             //if json could not be loaded
             JSONNotLoaded();
         }else {
-            onJSONLoaded(jArr);
+            onJSONLoaded(jObj);
         }
     }
     //abstract methods to be implemented in sublcass
-    public abstract void onJSONLoaded(JSONArray jArr);
+    public abstract void onJSONLoaded(JSONObject jObj);
     public abstract void JSONNotLoaded();
 
 @Override
-    protected JSONArray doInBackground(String... urls) {
-    JSONArray jObj = null;
+    protected JSONObject doInBackground(String... urls) {
+    JSONObject jObj = null;
     try {
             //for GET Methods
             HttpGet httpGet = new HttpGet(urls[0]);
@@ -56,17 +55,15 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONArray> {
             StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
-                sb.append(line + "n");
+                sb.append(line); // if it is a JSONArray: use sb.append(line + "n");
                 line = reader.readLine();
             }
             is.close();
-             String json = sb.toString();
+            String json = sb.toString();
             // try parse the string to a JSON object
-            //[ = JSONArray && { = JSONObject, aufpassen welches Object falsch ist
+                //[ = JSONArray && { = JSONObject, aufpassen welches Object falsch ist
             //JSONObject is an unordered collection of name/value pairs
-             jObj= new JSONArray(json);
-            //Log.d("LogLari","LogJSON" +json);
-
+            jObj= new JSONObject(json); // if you get a JSONArray use: jObj= new JSONArray(json);
         } catch (Exception e) {
             Log.e("LogLari", "Error creating JSON, try  jObj= new JSONObject(json);" + e.toString());
             return null;
