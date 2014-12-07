@@ -27,7 +27,7 @@ public class test_activity extends ActionBarActivity {
             Log.d("LogsLar","JSONNotLoaded");
             }
         };
-        json.execute("http://www.kantinele.de/api/menus/getnextxdays/14");
+        json.execute("put in your url here!");
     }
 
 
