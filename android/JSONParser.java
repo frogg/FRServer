@@ -39,16 +39,18 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
     protected JSONObject doInBackground(String... urls) {
     JSONObject jObj = null;
     try {
-            //for GET Methods
-            HttpGet httpGet = new HttpGet(urls[0]);
-            //utf-8 important for umlaute
-            httpGet.setHeader("Content-Type", "text/html; charset=utf-8");
-            httpGet.setHeader("Accept", "application/json");
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            // if message entity exits => get it here
-            HttpEntity httpEntity = httpResponse.getEntity();
-            // get InputStream object of the entity
+        HttpEntity httpEntity = null;
+            if(urls[1].equals("GET")) {
+                //for GET Methods
+                HttpGet httpGet = new HttpGet(urls[0]);
+                //utf-8 important for umlaute
+                httpGet.setHeader("Content-Type", "text/html; charset=utf-8");
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                // if message entity exits => get it here
+                httpEntity = httpResponse.getEntity();
+                // get InputStream object of the entity
+            }
             InputStream is = httpEntity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "utf-8"), 8);
