@@ -36,7 +36,7 @@ public class test_activity extends ActionBarActivity {
         };
         //if you are working with the python test server, run it and put your IP address here
         //with transfer parameter : PUT, POST, GET
-        String transfer[] = {"http://192.168.178.22:5000/test/get","GET"};
+        String transfer[] = {"http://100.71.3.186:5000/test/post","POST"};
         json.execute(transfer);
     }
 

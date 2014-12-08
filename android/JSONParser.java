@@ -5,14 +5,23 @@ import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Larissa Laich on 11.11.14.
@@ -39,19 +48,27 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
     protected JSONObject doInBackground(String... urls) {
     JSONObject jObj = null;
     try {
-        HttpEntity httpEntity = null;
+        HttpResponse httpResponse = null;
             if(urls[1].equals("GET")) {
                 //for GET Methods
                 HttpGet httpGet = new HttpGet(urls[0]);
                 //utf-8 important for umlaute
                 httpGet.setHeader("Content-Type", "text/html; charset=utf-8");
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                // if message entity exits => get it here
-                httpEntity = httpResponse.getEntity();
-                // get InputStream object of the entity
+                 httpResponse = httpClient.execute(httpGet);
+            }else{
+                HttpClient client = new DefaultHttpClient();
+                HttpPost post = new HttpPost(urls[0]);
+                //set additional information like this => probably better in a own method for general use
+                List<NameValuePair> postInfo = new ArrayList<NameValuePair>();
+                postInfo.add(new BasicNameValuePair("lastName", "User"));
+                post.setEntity(new UrlEncodedFormEntity(postInfo));
+                 httpResponse = client.execute(post);
+
             }
-            InputStream is = httpEntity.getContent();
+             // if message entity exits => get it here
+        HttpEntity httpEntity = httpResponse.getEntity();
+        InputStream is = httpEntity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "utf-8"), 8);
             StringBuilder sb = new StringBuilder();
@@ -74,3 +91,8 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
     }
 }
 
+/*
+    private HTTPResponse getResponse(){
+
+    }
+*/
