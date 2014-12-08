@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -50,13 +51,8 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
     try {
         HttpResponse httpResponse = null;
             if(urls[1].equals("GET")) {
-                //for GET Methods
-                HttpGet httpGet = new HttpGet(urls[0]);
-                //utf-8 important for umlaute
-                httpGet.setHeader("Content-Type", "text/html; charset=utf-8");
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                 httpResponse = httpClient.execute(httpGet);
-            }else{
+            httpResponse = GETResponse(urls[0]);
+            }else if(urls[1].equals("POST"){
                 HttpClient client = new DefaultHttpClient();
                 HttpPost post = new HttpPost(urls[0]);
                 //set additional information like this => probably better in a own method for general use
@@ -89,10 +85,16 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
         }
         return jObj;
     }
+
+    private HttpResponse GETResponse(String url) throws IOException {
+        //for GET Methods
+        HttpGet httpGet = new HttpGet(url);
+        //utf-8 important for umlaute
+        httpGet.setHeader("Content-Type", "text/html; charset=utf-8");
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        return httpClient.execute(httpGet);
+    }
+
 }
 
-/*
-    private HTTPResponse getResponse(){
 
-    }
-*/
