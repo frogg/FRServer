@@ -12,7 +12,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,9 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Larissa Laich on 11.11.14.
@@ -52,19 +49,12 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
         HttpResponse httpResponse = null;
             if(urls[1].equals("GET")) {
             httpResponse = GETResponse(urls[0]);
-            }else if(urls[1].equals("POST"){
-                HttpClient client = new DefaultHttpClient();
-                HttpPost post = new HttpPost(urls[0]);
-                //set additional information like this => probably better in a own method for general use
-                List<NameValuePair> postInfo = new ArrayList<NameValuePair>();
-                postInfo.add(new BasicNameValuePair("lastName", "User"));
-                post.setEntity(new UrlEncodedFormEntity(postInfo));
-                 httpResponse = client.execute(post);
-
+            }else if(urls[1].equals("POST")){
+            httpResponse = POSTResponse(urls[0]);
             }
-             // if message entity exits => get it here
-        HttpEntity httpEntity = httpResponse.getEntity();
-        InputStream is = httpEntity.getContent();
+             // if message entity exits => get it here => in our example feedback json
+            HttpEntity httpEntity = httpResponse.getEntity();
+            InputStream is = httpEntity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "utf-8"), 8);
             StringBuilder sb = new StringBuilder();
@@ -93,6 +83,17 @@ public abstract class JSONParser extends AsyncTask<String, Void, JSONObject> {
         httpGet.setHeader("Content-Type", "text/html; charset=utf-8");
         DefaultHttpClient httpClient = new DefaultHttpClient();
         return httpClient.execute(httpGet);
+    }
+
+    private HttpResponse POSTResponse(String url) throws IOException{
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(url);
+        //set additional information like this => probably better in a own method for general use
+        //other idea hand JSON within url[2] for this information
+        List<NameValuePair> postInfo = new ArrayList<NameValuePair>();
+        postInfo.add(new BasicNameValuePair("lastName", "User"));
+        post.setEntity(new UrlEncodedFormEntity(postInfo));
+        return client.execute(post);
     }
 
 }

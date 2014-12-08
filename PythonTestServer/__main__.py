@@ -30,6 +30,8 @@ def test_put(code):
 	number = request.args.get('number', '3,1415')
 	#in the request header (not on body)
 	test = request.headers.get('test')
+	#in the request for the body
+	name = request.form.get('name',None)
 	print('put')
 	print(number)
 	print(test)
