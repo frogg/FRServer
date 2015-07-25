@@ -18,21 +18,48 @@
         [request setHTTPMethod:HTTPMethod];
         
         if(HTTPHeaderFields) {
+            
+            
             for(NSString *key in HTTPHeaderFields) {
                 [request setValue:[HTTPHeaderFields valueForKey:key] forHTTPHeaderField:key];
             }
+            
+            NSLog(@"%@",HTTPHeaderFields);
+            
+            
         }
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         
         
         if(attributes) {
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:attributes options:0 error:nil];
-            request.HTTPBody = jsonData;
+            NSString *attributesString=@"";
+                        
+            NSError *error;
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:attributes
+                                                               options:NSJSONWritingPrettyPrinted
+                                                                 error:&error];
+            
+            if (! jsonData) {
+                NSLog(@"Got an error: %@", error);
+            } else {
+                attributesString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            }
+            
+            
+            
+            
+            
+            NSLog(@"%@",attributesString);
+            
+            request.HTTPBody = [attributesString dataUsingEncoding:NSUTF8StringEncoding];;
         }
         
         
         NSURLResponse *response;
         NSError *err;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
+        
+        NSLog(@"%@",response);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             block(responseData);
@@ -58,6 +85,7 @@
 
 +(void) jsonFromURL:(NSString *)url HTTPMethod:(NSString *)HTTPMethod attributes:(NSDictionary *)attributes HTTPHeaderFieldDictionary:(NSDictionary *)HTTPHeaderFields andCallbackBlock:(void (^)(NSDictionary *))block {
     
+    
     void (^finishedDownloading)(NSData *data) = ^void(NSData *data) {
         if(data) {
             block([NSJSONSerialization JSONObjectWithData:data options:0 error:nil]);
@@ -71,7 +99,7 @@
 }
 
 +(void) stringFromURL:(NSString *)url HTTPMethod:(NSString *)HTTPMethod attributes:(NSDictionary *)attributes HTTPHeaderFieldDictionary:(NSDictionary *)HTTPHeaderFields andCallbackBlock:(void (^)(NSString *))block {
-
+    
     void (^finishedDownloading)(NSData *data) = ^void(NSData *data) {
         if(data) {
             NSString *string = [ [ NSString alloc ] initWithData:data encoding:NSUTF8StringEncoding ];
