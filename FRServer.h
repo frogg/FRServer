@@ -12,15 +12,6 @@
 @interface FRServer : NSObject
 
 
-+(void) dataFromURL:(NSString *) url HTTPMethod:(NSString *) HTTPMethod attributes:(NSDictionary *) attributes HTTPHeaderFieldDictionary:(NSDictionary *) HTTPHeaderFields andCallbackBlock: (void (^) (NSData *data)) block;
-
-+(void) imageFromURL:(NSString *) url HTTPMethod:(NSString *) HTTPMethod attributes:(NSDictionary *) attributes HTTPHeaderFieldDictionary:(NSDictionary *) HTTPHeaderFields andCallbackBlock: (void (^) (UIImage *image)) block;
-
-+(void) jsonFromURL:(NSString *) url HTTPMethod:(NSString *) HTTPMethod attributes:(NSDictionary *) attributes HTTPHeaderFieldDictionary:(NSDictionary *) HTTPHeaderFields andCallbackBlock: (void (^) (NSDictionary *JSON)) block;
-
-+(void) stringFromURL:(NSString *)url HTTPMethod:(NSString *)HTTPMethod attributes:(NSDictionary *)attributes HTTPHeaderFieldDictionary:(NSDictionary *)HTTPHeaderFields andCallbackBlock:(void (^)(NSString *))block;
-
-
 +(void) dataFromServerRequest:(FRServerRequest *) serverRequest;
 +(void) imageFromServerRequest:(FRServerRequest *) serverRequest;
 +(void) jsonFromServerRequest:(FRServerRequest *) serverRequest;
